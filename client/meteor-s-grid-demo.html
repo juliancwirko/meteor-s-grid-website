@@ -1,0 +1,235 @@
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylus Flexbox grid system for Meteor with PostCSS</title>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,200,300,500,700,600,800,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    {{> stickyHeder}}
+    {{> main}}
+    {{> backBtn}}
+</body>
+
+<template name="stickyHeder">
+    <div class="sticky-header js-sticky-header">
+        <div class="smenu">
+            <span><a href="#" class="js-go-top">sGrid</a></span>
+            <small>
+                <a href="http://stylusgrid.com">Docs</a>
+            </small>
+        </div>
+    </div>
+</template>
+
+<template name="backBtn">
+    <div class="back-to-top-btn js-back-to-top-btn hidden">
+        <i class="fa fa-angle-up"></i>
+    </div>
+</template>
+
+<template name="main">
+    <header>
+        <div class="logo">
+            <h1>sGrid</h1>
+        </div>
+        <div class="menu">
+            <a href="http://stylusgrid.com"><i class="fa fa-fw fa-home"></i></a>
+            <a href="https://twitter.com/JulianCwirko"><i class="fa fa-fw fa-twitter"></i></a>
+            <a href="https://github.com/juliancwirko"><i class="fa fa-fw fa-github"></i></a>
+        </div>
+    </header>
+    <section class="jumbo">
+        <h2>sGrid for Meteor.js</h2>
+        <span>with Flexbox,</span>
+        <small>Stylus and PostCSS</small>
+        <div class="buttons">
+            <a href="#" class="btn btn-jumbo js-go-to-install"><i class="fa fa-power-off"></i> Install</a>
+            <a href="https://github.com/juliancwirko/meteor-s-grid" class="btn btn-jumbo"><i class="fa fa-github"></i> GitHub</a>
+        </div>
+    </section>
+    <main>
+        {{> docs}}
+    </main>
+</template>
+
+<template name="docs">
+    <section class="docs">
+{{#markdown}}
+
+## Instalation
+- - -
+
+Install it:
+
+```bash
+$ meteor add juliancwirko:s-grid
+```
+
+Then in your main *.styl file import:
+
+```html
+@import 's-grid-settings'
+@import 's-grid-functions'
+@import 's-grid-classes' // optional - only if you want to use helper classes
+```
+
+&nbsp;
+
+### sGrid docs: [stylusgrid.com](http://stylusgrid.com)
+
+&nbsp;
+
+#### Atmosphere package: [https://atmospherejs.com/juliancwirko/s-grid](https://atmospherejs.com/juliancwirko/s-grid)
+
+&nbsp;
+
+#### You will find grid files in the standalone npm package: [https://github.com/juliancwirko/s-grid](https://github.com/juliancwirko/s-grid)
+
+## Usage
+- - -
+
+You don't need to install the Meteor Stylus package because it is absorbed by sGrid. If you have it installed just uninstall it and install only the sGrid package.
+
+&nbsp;
+
+#### Read about it:
+
+- [Introducing sGrid: A Stylus-based Flexbox Grid System](http://www.sitepoint.com/introducing-sgrid-a-stylus-based-flexbox-grid-system/) (sitepoint.com)
+- [sGrid - Working with Flexible Box layouts](http://julian.io/s-grid-working-with-flexible-box-layouts/) (julian.io)
+- [My workflow with the Stylus and Flexbox grid system](https://medium.com/@juliancwirko/my-workflow-with-the-stylus-and-flexbox-grid-system-5f4f50ac3f33) (medium.com)
+
+## Use PostCSS plugins with Stylus
+- - -
+
+**It is totally optional and usage will change for Meteor 1.3**
+
+From version 2.1.0 you can use PostCSS and PostCSS plugins with this package. It is possible because of Stylus plugin which is called [poststylus](https://github.com/seaneking/poststylus).
+
+&nbsp;
+
+From version 2.2.0 to use PostCSS with this package you will need to install [meteorhacks:npm](https://github.com/meteorhacks/npm) package and you should do it by hand because not all users want to use PostCSS so it will not be added automatically. Read more below.
+
+&nbsp;
+
+(You don't have to add autoprefixer. It is added by default because s-grid needs it. You can configure it. Read more about it below.)
+
+&nbsp;
+
+**To use PostCSS plugins all you need to do is:**
+
+### 1. Add `meteorhacks:npm` package
+
+```
+$ meteor add meteorhacks:npm
+```
+
+When you run your Meteor app there will be `packages.json` file created in the root of your app. You can specify PostCSS plugins there (standard npm packages). Example:
+
+**packages.json (npm packages):**
+```javascript
+{
+    "rucksack-css": "0.8.5"
+}
+```
+
+Restart your app.
+Of course you can use `meteorhacks:npm` as always.
+PostCSS will know which Npm packages are PostCSS plugins and which are not.
+
+### 2. If you need to pass some options to your PostCSS plugins create options file `sgrid.json` in the root app folder.
+
+Example of options file (passing some options to the autoprefixer plugin):
+
+**sgrid.json (PostCSS plugins options - this file is optional):**
+```javascript
+{
+    "postcss": {
+        "pluginsOptions": {
+            "autoprefixer": {"browsers": ["last 2 versions"]}
+        }
+    }
+}
+```
+
+### 3. Now you can use all the features which are provided by Rucksack plugin.
+
+So in our example in .styl file you could write something like:
+
+Stylus:
+```css
+@alias
+  fs font-size
+  bg background
+  c color
+
+.item
+    fs 30px
+    bg #000
+    c #fff
+```
+
+Compiled to (with Rucksack):
+```css
+.item
+    font-size 30px
+    background-color #000
+    color #fff
+```
+
+**Of course you can add more PostCSS plugins. There is no need to use PostCSS plugins which are responsible for imports, variables etc because it is all in Stylus, but sometimes there are great PostCSS plugins out there.**
+
+&nbsp;
+
+Unfortunately for now in Meteor there isn't simpler way to include custom PostCSS plugins from outside. You need to use `meteorhacks:npm` package which is great.
+
+&nbsp;
+
+If you want to change something in `sgrid.json` config file later, you should restart your app and also change any .style file to rerun build plugin.
+
+&nbsp;
+
+**Standalone PostCSS package for Meteor:**
+
+- [PostCSS for Meteor](https://atmospherejs.com/juliancwirko/postcss)
+
+
+### License
+- - -
+
+MIT
+
+### Download and use this website for your documentation
+
+```
+$ git clone https://github.com/juliancwirko/meteor-s-grid-website.git
+$ cd meteor-s-grid-website
+$ rm -rf .git
+$ meteor
+```
+
+[https://github.com/juliancwirko/meteor-s-grid-website](https://github.com/juliancwirko/meteor-s-grid-website)
+
+### Check out other tools for Meteor:
+- - -
+
+* [Prettify and export your raw git diff output](https://atmospherejs.com/juliancwirko/pretty-diff)
+* [Foundation 5 with Scss for Meteor](https://atmospherejs.com/juliancwirko/zf5)
+* [Simple and fancy notifications for Meteor](https://atmospherejs.com/juliancwirko/s-alert)
+* [Stylus with Jeet, Autoprefixer, Rupture and Nib for Meteor](https://atmospherejs.com/juliancwirko/s-jeet)
+* [Simple accounts for Meteor](https://atmospherejs.com/juliancwirko/s-id)
+* [Scotty - Meteor boilerplate](https://github.com/juliancwirko/scotty)
+* [Meteor CylonJS wrapper for Arduino board](https://atmospherejs.com/juliancwirko/caprica)
+
+### Also check out standalone front-end tools:
+- - -
+
+* [S-Grid GruntJS project scaffold](https://github.com/juliancwirko/s-grid-grunt)
+* [Yeoman generator for Zurb Foundation 5](https://github.com/juliancwirko/generator-zf5)
+* [Free, very simple and clean starter theme for your Ghost blog](https://github.com/juliancwirko/abc)
+* [HTML only and GruntJS based project scaffold](https://github.com/juliancwirko/html-project)
+
+{{/markdown}}
+    </section>
+</template>
